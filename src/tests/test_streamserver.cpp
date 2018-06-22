@@ -2,6 +2,7 @@
 #include <string>
 #include <thread>
 #include <chrono>
+#include <vector>
 #include <errno.h>
 // net stuff
 
@@ -23,7 +24,7 @@ public:
         m_stop = true;
     }
 
-}
+};
 
 class ClientManager {
 public:
@@ -62,6 +63,8 @@ public:
         
         }
     }
+
+    bool m_stop = false;
 
 
 };

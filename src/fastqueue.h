@@ -11,7 +11,7 @@ public:
     FastQueueSPSC()
     {
     }
-    
+
     // push return false if queue is full
     bool push(T* val)
     {
@@ -64,7 +64,7 @@ public:
         m_head.store(0, std::memory_order_release);
         m_tail.store(0, std::memory_order_release);
     }
-    
+
     void push(T* val)
     {
         auto idx = m_tail.load(std::memory_order_acquire) & m_mask;
@@ -106,7 +106,7 @@ public:
     FastQueueCASSPSC()
     {
     }
-    
+
     void push(T* val)
     {
         auto cur_tail = m_tail;

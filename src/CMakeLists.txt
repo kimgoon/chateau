@@ -6,5 +6,6 @@ set(GOOGLE_TEST_PATH "${PROJECT_SOURCE_DIR}/../benchmark/googletest/")
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # add child directories
+add_subdirectory(network)
 add_subdirectory(benches)
 add_subdirectory(tests)
