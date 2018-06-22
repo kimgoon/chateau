@@ -1,5 +1,3 @@
-
-set(GOOGLE_TEST_PATH "${PROJECT_SOURCE_DIR}/../benchmark/googletest/")
 include_directories(${GOOGLE_TEST_PATH}/googletest/include)
 link_directories   (${GOOGLE_BENCHMARK_PATH}/out/googletest/googlemock/gtest)
 

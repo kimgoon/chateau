@@ -1,4 +1,3 @@
-set(GOOGLE_BENCHMARK_PATH "${PROJECT_SOURCE_DIR}/../benchmark")
 include_directories(${GOOGLE_BENCHMARK_PATH}/include/)
 link_directories   (${GOOGLE_BENCHMARK_PATH}/out/src/)
 
