@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+#convenience script for compiling
+
+mkdir -p out
+cd out
+cmake ..
+make -j4
+
