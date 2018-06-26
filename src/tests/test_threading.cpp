@@ -33,5 +33,7 @@ int main()
 
     std::cout << "Elapsed:" << sw.get_elapsed() << std::endl;
     std::cout << "Elapsed:" << sw.get_elapsed_as_str() << std::endl;
+    auto ts = util::StopWatch::get_res();
+    std::cout << "Res:" << ts.tv_sec << "." << ts.tv_nsec << std::endl;
     return 0;
 }

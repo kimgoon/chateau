@@ -51,6 +51,12 @@ public:
         return res;
     }
 
+    inline static struct timespec get_res() {
+        struct timespec ts;
+        clock_getres(CLOCK_REALTIME, &ts);
+        return ts;
+    }
+
 private:
     inline int64_t get_diff(const struct timespec* end, const struct timespec* begin)
     {
