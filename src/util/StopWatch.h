@@ -8,10 +8,11 @@
 namespace util {
 
 // StopWatch header only utility class to measure time elapsed using the wall clock
-class StopWatch {
+template<clockid_t ClockType>
+class StopWatchImpl {
 public:
     // ctor, optionally start the stopwatch
-    inline StopWatch(bool start) {
+    inline StopWatchImpl(bool start) {
         if (start) {
             start_time();
         }
@@ -19,7 +20,7 @@ public:
     // start_time starts the stop watch
     inline void start_time()
     {
-        auto rc = clock_gettime(CLOCK_REALTIME, &m_start);
+        auto rc = clock_gettime(ClockType, &m_start);
         if (rc != 0) {
             throw std::runtime_error("clock_gettime returned rc:" + std::string(strerror(errno)));
         }
@@ -29,7 +30,7 @@ public:
     inline void stop_time()
     {
         struct timespec end;
-        auto rc = clock_gettime(CLOCK_REALTIME, &end);
+        auto rc = clock_gettime(ClockType, &end);
         if (rc != 0) {
             throw std::runtime_error("clock_gettime returned rc:" + std::string(strerror(errno)));
         }
@@ -53,7 +54,7 @@ public:
 
     inline static struct timespec get_res() {
         struct timespec ts;
-        clock_getres(CLOCK_REALTIME, &ts);
+        clock_getres(ClockType, &ts);
         return ts;
     }
 
@@ -69,5 +70,7 @@ private:
     struct timespec m_start;
     int64_t m_elapsed;
 };
+
+using StopWatch = StopWatchImpl<CLOCK_REALTIME>;
 
 } // close namespace util
