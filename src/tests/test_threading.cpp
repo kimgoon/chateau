@@ -2,7 +2,9 @@
 #include <thread>
 #include <mutex>
 #include <unistd.h>
+#include <chrono>
 
+#include "util/StopWatch.h"
 
 std::mutex myLock;
 
@@ -18,6 +20,7 @@ void func(int x)
 
 int main()
 {
+    util::StopWatch sw(true);
     std::thread th(&func, 100);
     std::thread th2(&func, 100);
     th.join();
@@ -25,5 +28,10 @@ int main()
     std::cout << "value: " << v << std::endl;
     std::cout << "Outside thread:" << std::this_thread::get_id() << std::endl;
 
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    sw.stop_time();
+
+    std::cout << "Elapsed:" << sw.get_elapsed() << std::endl;
+    std::cout << "Elapsed:" << sw.get_elapsed_as_str() << std::endl;
     return 0;
 }
