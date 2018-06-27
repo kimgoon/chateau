@@ -52,14 +52,12 @@ private:
     struct sockaddr_in m_server_addr;
     short m_port = 0;
     std::string m_ip;
-
-
 };
 
 class TcpServerConnection : public TcpConnection {
 public:
-    bool accept();
-    bool listen();
+    bool accept() { throw std::runtime_error(std::string(__FUNCTION__) + " Not implemented"); }
+    bool listen() { throw std::runtime_error(std::string(__FUNCTION__) + " Not implemented"); }
 };
 
 

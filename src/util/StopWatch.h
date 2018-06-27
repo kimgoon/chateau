@@ -72,5 +72,6 @@ private:
 };
 
 using StopWatch = StopWatchImpl<CLOCK_REALTIME>;
+using MonotonicStopWatch = StopWatchImpl<CLOCK_MONOTONIC>;
 
 } // close namespace util

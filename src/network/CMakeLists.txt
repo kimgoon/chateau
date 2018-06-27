@@ -1,2 +1,3 @@
 add_library(network
-    TcpConnection.cpp)
+    TcpConnection.cpp
+    TcpConnectionHub.cpp)

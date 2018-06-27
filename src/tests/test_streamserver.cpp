@@ -44,7 +44,7 @@ public:
             if (num_of_clients != client_fds.size()) {
                 // update and reset our data
             }
-        
+
             if (num_of_clients == 0) {
                 std::this_thread::sleep_for(std::chrono::seconds(1));
                 continue;
@@ -54,13 +54,7 @@ public:
 
             // check for read action
 
-
             // check for write action
-        
-        
-        
-        
-        
         }
     }
 
@@ -85,7 +79,7 @@ public:
         struct sockaddr_in address;
         int address_len = sizeof(address);
         int opt = 1;
-    
+
         server_fd = socket(AF_INET, SOCK_STREAM, 0);
         if (server_fd == 0) {
             std::cout << "error while creating server socket" << std::endl;
@@ -102,7 +96,7 @@ public:
         address.sin_family = AF_INET;
         address.sin_addr.s_addr = INADDR_ANY;
         address.sin_port = htons(m_listen_port);
-        
+
         rc = bind(server_fd, reinterpret_cast<sockaddr*>(&address), sizeof(address));
         if (rc < 0) {
             std::cout << "error while binding server socket rc:" << rc << std::endl;
