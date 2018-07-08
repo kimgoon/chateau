@@ -1,7 +1,7 @@
 #include "TcpConnectionHub.h"
-#include "util/except.h"
+#include "util/Except.h"
 #include <string>
-#include <thread>
+#include <iostream>
 
 namespace network {
 
@@ -13,7 +13,16 @@ bool TcpConnectionHub::init()
 bool TcpConnectionHub::start()
 {
     m_alive = true;
+    std::cout << "Starting tcpconnectionhub" << std::endl;
+
+    m_hb_thread = std::make_unique<std::thread>(&TcpConnectionHub::start_hb_thread, this);
     return true;
+}
+
+void TcpConnectionHub::stop()
+{
+    std::cout << "Stopping tcpconnectionhub" << std::endl;
+    m_alive = false;
 }
 
 TcpClientConnection* TcpConnectionHub::get_connection(const std::string& name) const
@@ -48,11 +57,27 @@ bool TcpConnectionHub::is_connection_exists(const std::string& name) const
 void TcpConnectionHub::start_hb_thread()
 {
 
+    int seq_no = 0;
     while(m_alive)
     {
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        std::this_thread::sleep_for(std::chrono::seconds(m_hb_interval_sec));
         // loop through all connections and send a heartbeat msg
+        std::string hb_msg = "HB:";
+        hb_msg += std::to_string(seq_no);
 
+        {
+            std::lock_guard<std::mutex> lock(m_mutex);
+            for(auto& pare : m_name_to_conn)
+            {
+                auto& name = pare.first;
+                auto& conn = pare.second;
+
+                std::cout << "sending hb for " << name << " msg:'" << hb_msg.c_str()
+                    << "' size:" << hb_msg.size() << std::endl;
+
+                conn->send_bytes(static_cast<const void*>(hb_msg.c_str()), hb_msg.size());
+            }
+        }
     }
 }
 

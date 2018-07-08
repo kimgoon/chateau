@@ -1,5 +1,5 @@
 #include "TcpConnection.h"
-#include "util/except.h"
+#include "util/Except.h"
 #include <arpa/inet.h>
 #include <iostream>
 

@@ -25,13 +25,13 @@ enum TcpConnectionType {
 class TcpConnection {
 
 public:
-    inline int send_bytes(void* buf, size_t len)
+    inline int send_bytes(const void* buf, size_t len)
     {
         auto sent_n = send(m_fd, buf, len, 0);
         return sent_n;
     }
 
-    inline int read_bytes(void* buf, size_t buf_size) {
+    inline int read_bytes(const void* buf, size_t buf_size) {
         auto write_n = write(m_fd, buf, buf_size);
         return write_n;
     }

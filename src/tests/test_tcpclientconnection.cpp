@@ -2,6 +2,7 @@
 #include "network/TcpConnectionHub.h"
 
 #include <iostream>
+#include <thread>
 
 int main()
 {
@@ -14,6 +15,17 @@ int main()
     if (conn) {
         std::cout << "connection successful" << std::endl;
     }
+
+    auto hub = std::make_unique<network::TcpConnectionHub>();
+
+    hub->add_connection("first", conn.get());
+
+    hub->start();
+
+    std::cout << "sleeping for 10 sec" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+
+    hub->stop();
 
     return 0;
 }
