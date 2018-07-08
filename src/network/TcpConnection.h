@@ -30,11 +30,14 @@ public:
         auto sent_n = send(m_fd, buf, len, 0);
         return sent_n;
     }
+
     inline int read_bytes(void* buf, size_t buf_size) {
         auto write_n = write(m_fd, buf, buf_size);
         return write_n;
     }
+
     inline const int get_fd() const { return m_fd; }
+
 
 protected:
     int m_fd = 0;
@@ -53,6 +56,7 @@ private:
     short m_port = 0;
     std::string m_ip;
 };
+
 
 class TcpServerConnection : public TcpConnection {
 public:

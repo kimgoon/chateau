@@ -1,10 +1,22 @@
 #include "TcpConnectionHub.h"
-
+#include "util/except.h"
 #include <string>
+#include <thread>
 
 namespace network {
 
-TcpClientConnection* TcpConnectionHub::get_connection(const std::string& name)
+bool TcpConnectionHub::init()
+{
+    return true;
+}
+
+bool TcpConnectionHub::start()
+{
+    m_alive = true;
+    return true;
+}
+
+TcpClientConnection* TcpConnectionHub::get_connection(const std::string& name) const
 {
     auto it = m_name_to_conn.find(name);
     if (it == m_name_to_conn.end()) {
@@ -16,6 +28,7 @@ TcpClientConnection* TcpConnectionHub::get_connection(const std::string& name)
 bool TcpConnectionHub::add_connection(const std::string& name, TcpClientConnection* conn)
 {
     if (name.empty() || m_name_to_conn.count(name) > 0) {
+        throw_ex(std::runtime_error, "Unable to add connection:"<<name);
         return false;
     }
 
@@ -23,5 +36,25 @@ bool TcpConnectionHub::add_connection(const std::string& name, TcpClientConnecti
 
     return true;
 }
+
+bool TcpConnectionHub::is_connection_exists(const std::string& name) const
+{
+    if (m_name_to_conn.count(name)) {
+        return true;
+    }
+    return false;
+}
+
+void TcpConnectionHub::start_hb_thread()
+{
+
+    while(m_alive)
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        // loop through all connections and send a heartbeat msg
+
+    }
+}
+
 
 } // close namespace network

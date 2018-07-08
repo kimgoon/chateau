@@ -10,4 +10,5 @@ add_executable(test_tcpclientconnection test_tcpclientconnection.cpp)
 target_link_libraries(test_tcpclientconnection
     network)
 add_executable(test_streamserver test_streamserver.cpp)
+add_executable(test_except test_except.cpp)
 
