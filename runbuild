@@ -2,8 +2,8 @@
 
 #convenience script for compiling
 
-mkdir -p out
-cd out
+mkdir -p build
+cd build
 cmake ..
 make -j4
 
