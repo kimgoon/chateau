@@ -1,5 +1,6 @@
 #include "TcpConnectionHub.h"
 #include "util/Except.h"
+#include "util/Logger.h"
 #include <string>
 #include <iostream>
 
@@ -13,7 +14,7 @@ bool TcpConnectionHub::init()
 bool TcpConnectionHub::start()
 {
     m_alive = true;
-    std::cout << "Starting tcpconnectionhub" << std::endl;
+    LOG_INFO(__FUNCTION__ << ":starting");
 
     m_hb_thread = std::make_unique<std::thread>(&TcpConnectionHub::start_hb_thread, this);
     return true;
@@ -21,8 +22,9 @@ bool TcpConnectionHub::start()
 
 void TcpConnectionHub::stop()
 {
-    std::cout << "Stopping tcpconnectionhub" << std::endl;
+    LOG_INFO(__FUNCTION__ << ":stopping");
     m_alive = false;
+    m_hb_thread->join();
 }
 
 TcpClientConnection* TcpConnectionHub::get_connection(const std::string& name) const
@@ -67,16 +69,29 @@ void TcpConnectionHub::start_hb_thread()
 
         {
             std::lock_guard<std::mutex> lock(m_mutex);
-            for(auto& pare : m_name_to_conn)
+            for(auto& p : m_name_to_conn)
             {
-                auto& name = pare.first;
-                auto& conn = pare.second;
+                auto& name = p.first;
+                auto& conn = p.second;
 
-                std::cout << "sending hb for " << name << " msg:'" << hb_msg.c_str()
-                    << "' size:" << hb_msg.size() << std::endl;
+                LOG_DEBUG("sending hb for " << name << " msg:'" << hb_msg.c_str()
+                        << "' size:" << hb_msg.size());
 
                 conn->send_bytes(static_cast<const void*>(hb_msg.c_str()), hb_msg.size());
             }
+        }
+    }
+    close_all_connections();
+}
+
+void TcpConnectionHub::close_all_connections()
+{
+    LOG_INFO(__FUNCTION__ << ":closing all connections");
+    for(auto& p : m_name_to_conn)
+    {
+        auto rc = p.second->close();
+        if (rc != 0) {
+            LOG_ERROR(__FUNCTION__ << ":connection " << p.first << " error during close, rc=" << rc);
         }
     }
 }

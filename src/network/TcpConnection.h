@@ -21,7 +21,7 @@ enum TcpConnectionType {
 };
 
 // TcpConnection is a low level abstraction of the connection layer
-// It wraps the file_descriptor
+// It wraps the file descriptor
 class TcpConnection {
 
 public:
@@ -36,8 +36,11 @@ public:
         return write_n;
     }
 
+    // get_fd returns the socket file descriptor 
     inline const int get_fd() const { return m_fd; }
 
+    // close - closes the socket
+    inline int close() { return ::close(m_fd); }
 
 protected:
     int m_fd = 0;
