@@ -32,9 +32,9 @@ public:
     {
         if (m_head != m_tail) {
             auto idx = m_tail & m_mask;
+            std::atomic_thread_fence(std::memory_order_acquire);
             auto val = m_elements[idx];
 
-            std::atomic_thread_fence(std::memory_order_release);
             // publish head
             ++m_head;
             return val;
