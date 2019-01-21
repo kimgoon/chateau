@@ -12,6 +12,9 @@
 #include <netinet/in.h>
 
 
+#include <sys/event.h>
+
+
 class ManagersBase {
 public:
     bool m_stop = false;
@@ -33,6 +36,9 @@ public:
 
     void init()
     {
+        FD_ZERO(&m_master_set);
+
+        //FD_SET(listen_sd, &m_master_set);
     }
 
     void start()
@@ -60,6 +66,8 @@ public:
 
     bool m_stop = false;
 
+    struct fd_set m_master_set;
+    struct fd_set m_working_set;
 
 };
 
@@ -120,10 +128,6 @@ public:
 
             std::cout << "got new client fd: " << new_socket << std::endl;
         }
-
-
-
-
         return true;
     }
 
@@ -132,15 +136,10 @@ private:
 
 int main()
 {
-
     std::cout << "hello from test_streamserver.cpp" << std::endl;
-
 
     std::unique_ptr<ConnectionManager> conn_mgr = std::make_unique<ConnectionManager>();
     conn_mgr->start();
-
-
-
 
     return 0;
 }

@@ -15,6 +15,7 @@ public:
     // push return false if queue is full
     bool push(T* val)
     {
+        std::atomic_thread_fence(std::memory_order_acquire);
         if (m_tail - m_head > N) {
             return false;
         }
@@ -30,12 +31,13 @@ public:
 
     T* pop()
     {
+        std::atomic_thread_fence(std::memory_order_acquire);
         if (m_head != m_tail) {
             auto idx = m_tail & m_mask;
-            std::atomic_thread_fence(std::memory_order_acquire);
             auto val = m_elements[idx];
 
             // publish head
+            std::atomic_thread_fence(std::memory_order_release);
             ++m_head;
             return val;
         }
@@ -133,3 +135,6 @@ private:
     Node* m_head = nullptr;
     Node* m_tail = nullptr;
 };
+
+
+
